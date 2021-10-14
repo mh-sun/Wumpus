@@ -110,10 +110,6 @@ class Tiles:
         self.height = self.tiles_size * self.tiles_row_count
         self.width = self.tiles_size * self.tiles_col_count
 
-        self.wumpus_count = 10
-        self.pit_count = 4
-        self.gold_count = 5
-
         self.visible_floor = pygame.image.load(con.VISIBLE_FLOOR)
         self.hidden_floor = pygame.image.load(con.HIDDEN_FLOOR)
         self.wumpus = pygame.image.load(con.WUMPUS)
@@ -144,9 +140,9 @@ class Tiles:
         return obstacle
 
     def set_obstacle(self):
-        self.set_value(self.wumpus_count, "w")
-        self.set_value(self.gold_count, "g")
-        self.set_value(self.pit_count, "p")
+        self.set_value(con.WUMPUS_COUNT, "w")
+        self.set_value(con.GOLD_COUNT, "g")
+        self.set_value(con.PIT_COUNT, "p")
 
     def set_value(self, count, cls):
         for i in range(count):
@@ -158,36 +154,27 @@ class Tiles:
         font = pygame.font.SysFont('timesnewroman', 10)
         breeze = font.render("BREEZE", False, con.BLACK, con.WHITE)
         stench = font.render("STENCH", False, con.BLACK, con.WHITE)
+        lit = font.render("LIT", False, con.BLACK, con.WHITE)
 
-        for i in range(self.tiles_col_count):
-            for j in range(self.tiles_row_count):
-                # if self.tiles_con[i][j] == 'h':
-                #     continue
-                # elif self.tiles_con[i][j] == 'v':
-                if self.obstacle[i][j] == 'p':
-                    self.set_breeze(breeze, i, j, surface)
-                if self.obstacle[i][j] == 'w':
-                    self.set_stench(stench, i, j, surface)
+        for i in range(self.tiles_col_count-1):
+            for j in range(self.tiles_row_count-1):
+                if self.tiles_con[i][j] == 'h':
+                    continue
+                elif self.tiles_con[i][j] == 'v':
+                    if self.obstacle[i+1][j] == 'p':
+                        surface.blit(breeze, (i * self.tiles_size, j * self.tiles_size))
+                    elif self.obstacle[i][j+1] == 'p':
+                        surface.blit(breeze, (i * self.tiles_size, j * self.tiles_size))
 
-    def set_breeze(self, text, i, j, surface):
-        if i + 1 < self.tiles_col_count:
-            surface.blit(text, ((i + 1) * self.tiles_size, j * self.tiles_size))
-        if i - 1 >= 0:
-            surface.blit(text, ((i - 1) * self.tiles_size, j * self.tiles_size))
-        if j + 1 < self.tiles_row_count:
-            surface.blit(text, (i * self.tiles_size, (j + 1) * self.tiles_size))
-        if j - 1 >= 0:
-            surface.blit(text, (i * self.tiles_size, (j - 1) * self.tiles_size))
+                    if self.obstacle[i + 1][j] == 'w':
+                        surface.blit(stench, (i * self.tiles_size, j * self.tiles_size + 52))
+                    elif self.obstacle[i][j + 1] == 'w':
+                        surface.blit(stench, (i * self.tiles_size, j * self.tiles_size + 52))
 
-    def set_stench(self, text, i, j, surface):
-        if i + 1 < self.tiles_col_count:
-            surface.blit(text, ((i + 1) * self.tiles_size, j * self.tiles_size + 52))
-        if i - 1 >= 0:
-            surface.blit(text, ((i - 1) * self.tiles_size, j * self.tiles_size + 52))
-        if j + 1 < self.tiles_row_count:
-            surface.blit(text, (i * self.tiles_size, (j + 1) * self.tiles_size + 52))
-        if j - 1 >= 0:
-            surface.blit(text, (i * self.tiles_size, (j - 1) * self.tiles_size + 52))
+                    if self.obstacle[i + 1][j] == 'g':
+                        surface.blit(lit, (i * self.tiles_size, j * self.tiles_size + 26))
+                    elif self.obstacle[i][j + 1] == 'g':
+                        surface.blit(lit, (i * self.tiles_size, j * self.tiles_size + 26))
 
     def grid(self, surface):
         for i in range(self.tiles_row_count):
@@ -214,6 +201,9 @@ class Tiles:
                     surface.blit(self.gold, (i * self.tiles_size, j * self.tiles_size))
 
 
+
 if __name__ == "__main__":
     game = Game()
     game.run()
+
+

@@ -17,3 +17,7 @@ VISIBLE_FLOOR = './res/floor.png'
 HIDDEN_FLOOR = './res/floor_1.png'
 # -----------------------------
 CAPTION = "Wumpus World"
+# -----------------------------
+WUMPUS_COUNT = 10
+PIT_COUNT = 10
+GOLD_COUNT = 10
