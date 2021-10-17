@@ -2,6 +2,7 @@
 # ------------------------
 WHITE = (255, 255, 255)
 BLACK = (0, 0, 0)
+LIGHTGREY = (200, 200, 200)
 # ------------------------
 WUMPUS_ICON = './res/wumpus.png'
 WUMPUS = './res/wumpus_ico.png'
@@ -18,6 +19,10 @@ HIDDEN_FLOOR = './res/floor_1.png'
 # -----------------------------
 CAPTION = "Wumpus World"
 # -----------------------------
-WUMPUS_COUNT = 10
+WUMPUS_COUNT = 1
 PIT_COUNT = 10
 GOLD_COUNT = 10
+# -----------------------------
+ROW_COUNT = 10
+COL_COUNT = 10
+TILE_SIZE = 64
