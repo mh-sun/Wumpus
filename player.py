@@ -6,18 +6,23 @@ import tiles
 
 class Player:
     def __init__(self):
+        self.clock = pygame.time.Clock()
         self.tiles = tiles.Tiles()
         self.player_image = pygame.image.load(con.PLAYER_DOWN)
         self.position = [0, 0]
         self.track = [[[0, 0], 'root']]
         self.Undel_track = [[[0, 0], 'root']]
+        self.score = 0
+
         self.map = tiles.array_construct('u')
         self.pit_prob = tiles.array_construct(0)
         self.wumpus_prob = tiles.array_construct(0)
         self.sensor_op(self.position[0], self.position[1])
 
     def draw_player(self, surface):
-
+        font = pygame.font.SysFont('timesnewroman', 30)
+        Score = font.render("Score :"+str(self.score), False, con.BLACK, con.WHITE)
+        surface.blit(Score,(self.tiles.width+30, 50))
         surface.blit(self.player_image, (self.position[1] * con.TILE_SIZE, self.position[0] * con.TILE_SIZE))
 
     def tile_state_change(self):
@@ -27,6 +32,10 @@ class Player:
             self.tiles.tiles_con[x][y] = 'v'
 
         self.sensor_op(x, y)
+
+        if 'l' in self.map[x][y]:
+            self.score += 100
+            self.tiles.get_gold(x, y, self.tiles.obstacle)
 
         if self.tiles.obstacle[x][y] == 'p':
             print("...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
@@ -74,9 +83,7 @@ class Player:
         unvisited_path = self.get_unvisited(valid_path)
         flag = False
         for i in range(len(unvisited_path)):
-            print("Test path :", unvisited_path[i])
             if self.isSafe(unvisited_path[i][0], unvisited_path[i][1]):
-                print('Safe Path: ', unvisited_path[i])
                 flag = True
                 if unvisited_path[i][2] == 'up':
                     self.track.append([unvisited_path[i], 'up'])
@@ -99,11 +106,13 @@ class Player:
 
                     self.on_down_key_pressed()
 
-            print("Player Pos: ", self.position)
             if flag:
                 break
         if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
-            self.get_Path()
+            paths = self.get_Path()
+            choosen_path = paths[0]
+
+
 
         if not flag:
             if self.track[len(self.track)-1][1] == 'up':
@@ -140,11 +149,9 @@ class Player:
         for i in range(len(sensors)):
             self.add_knowledge(x, y, sensors[i])
             if sensors[i] == 's':
-                print("STENCH FOUND")
                 self.Set_value(x, y, self.wumpus_prob, 1)
 
             if sensors[i] == 'b':
-                print("BREEZE FOUND")
                 self.Set_value(x, y, self.pit_prob, 1)
         if len(sensors) == 0:
             self.Set_value(x, y, self.wumpus_prob, -10)
@@ -153,7 +160,7 @@ class Player:
     def Set_value(self, x, y, prob, value):
         if x + 1 < 10 and 'v' not in self.map[x + 1][y]:
             prob[x + 1][y] += value
-        if x - 1 >= 0 and 'v' not in self.map[x + 1][y]:
+        if x - 1 >= 0 and 'v' not in self.map[x - 1][y]:
             prob[x - 1][y] += value
         if y + 1 < 10 and 'v' not in self.map[x][y + 1]:
             prob[x][y + 1] += value

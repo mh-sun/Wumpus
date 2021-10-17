@@ -35,27 +35,24 @@ class Game:
 
     def run(self):
         while self.running:
-            self.method_name()
+            self.event()
+            self.surface.fill(con.LIGHTGREY)
 
+            # self.print_obstacle()
+
+            self.tiles.background(self.surface)
+            self.tiles.text_view(self.surface)
+
+            self.clock.tick(2)
+            self.player.draw_player(self.surface)
             self.player.think_bro_think()
+            self.clock.tick(2)
+            self.window.update()
 
-            self.method_name1()
-
-    def method_name1(self):
-        self.window.update()
-        self.clock.tick(1)
-
-    def method_name(self):
-        self.event()
-        self.surface.fill(con.LIGHTGREY)
-        self.tiles.background(self.surface)
-        self.tiles.text_view(self.surface)
-
-        print("WUMPUS PROB")
+    def print_obstacle(self):
+        print('....................................................')
         for i in range(10):
-            print(self.player.wumpus_prob[i])
-
-        self.player.draw_player(self.surface)
+            print(self.tiles.obstacle[i])
 
 
 if __name__ == "__main__":

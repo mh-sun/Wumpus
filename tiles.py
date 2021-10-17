@@ -80,7 +80,7 @@ class Tiles:
         temp = []
         if i + 1 < con.ROW_COUNT and self.obstacle[i + 1][j] == 'p':
             temp.append('b')
-        if i - 1 >= 0 and  self.obstacle[i - 1][j] == 'p':
+        if i - 1 >= 0 and self.obstacle[i - 1][j] == 'p':
             temp.append('b')
         if j + 1 < con.COL_COUNT and self.obstacle[i][j + 1] == 'p':
             temp.append('b')
@@ -118,6 +118,8 @@ class Tiles:
                     elif self.obstacle[i][j] == 'w':
                         surface.blit(self.wumpus, (j * con.TILE_SIZE, i * con.TILE_SIZE))
                     elif self.obstacle[i][j] == 'g':
+                        gold_back = pygame.image.load('./res/floor_gold.png')
+                        surface.blit(gold_back, (j * con.TILE_SIZE, i * con.TILE_SIZE))
                         surface.blit(self.gold, (j * con.TILE_SIZE, i * con.TILE_SIZE))
 
         for i in range(con.ROW_COUNT):
@@ -127,3 +129,7 @@ class Tiles:
         for i in range(con.COL_COUNT):
             pygame.draw.line(surface, con.WHITE, (i * con.TILE_SIZE, 0), (i * con.TILE_SIZE, self.height))
         pygame.draw.line(surface, con.WHITE, (self.width - 1, 0), (self.width - 1, self.height))
+
+    def get_gold(self, x, y, obs):
+        if obs[x][y] == 'g':
+            obs[x][y] = 'n'
