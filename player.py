@@ -10,8 +10,10 @@ class Player:
         self.player_image = pygame.image.load(con.PLAYER_DOWN)
         self.position = [0, 0]
         self.track = [[[0, 0], 'root']]
+        self.Undel_track = [[[0, 0], 'root']]
         self.map = tiles.array_construct('u')
-        self.map_probability = tiles.array_construct(0)
+        self.pit_prob = tiles.array_construct(0)
+        self.wumpus_prob = tiles.array_construct(0)
         self.sensor_op(self.position[0], self.position[1])
 
     def draw_player(self, surface):
@@ -77,21 +79,32 @@ class Player:
                 print('Safe Path: ', unvisited_path[i])
                 flag = True
                 if unvisited_path[i][2] == 'up':
-                    self.track.append([unvisited_path[i],'up'])
+                    self.track.append([unvisited_path[i], 'up'])
+                    self.Undel_track.append([unvisited_path[i], 'up'])
+
                     self.on_up_key_pressed()
                 elif unvisited_path[i][2] == 'left':
                     self.track.append([unvisited_path[i], 'left'])
+                    self.Undel_track.append([unvisited_path[i], 'left'])
+
                     self.on_left_key_pressed()
                 elif unvisited_path[i][2] == 'right':
                     self.track.append([unvisited_path[i], 'right'])
+                    self.Undel_track.append([unvisited_path[i], 'right'])
+
                     self.on_right_key_pressed()
                 elif unvisited_path[i][2] == 'down':
                     self.track.append([unvisited_path[i], 'down'])
+                    self.Undel_track.append([unvisited_path[i], 'down'])
+
                     self.on_down_key_pressed()
 
             print("Player Pos: ", self.position)
             if flag:
                 break
+        if self.position == [0, 0] and 'v' in self.map[0][1] and 'v' in self.map[1][0]:
+            self.get_Path()
+
         if not flag:
             if self.track[len(self.track)-1][1] == 'up':
                 del self.track[len(self.track)-1]
@@ -120,12 +133,32 @@ class Player:
         return temp
 
     def sensor_op(self, x, y):
-        self.add_knowledge(x, y, 'o')
         self.add_knowledge(x, y, 'v')
 
         sensors = self.tiles.get_map(x, y)
+
         for i in range(len(sensors)):
             self.add_knowledge(x, y, sensors[i])
+            if sensors[i] == 's':
+                print("STENCH FOUND")
+                self.Set_value(x, y, self.wumpus_prob, 1)
+
+            if sensors[i] == 'b':
+                print("BREEZE FOUND")
+                self.Set_value(x, y, self.pit_prob, 1)
+        if len(sensors) == 0:
+            self.Set_value(x, y, self.wumpus_prob, -10)
+            self.Set_value(x, y, self.pit_prob, -10)
+
+    def Set_value(self, x, y, prob, value):
+        if x + 1 < 10 and 'v' not in self.map[x + 1][y]:
+            prob[x + 1][y] += value
+        if x - 1 >= 0 and 'v' not in self.map[x + 1][y]:
+            prob[x - 1][y] += value
+        if y + 1 < 10 and 'v' not in self.map[x][y + 1]:
+            prob[x][y + 1] += value
+        if y - 1 > 0 and 'v' not in self.map[x][y - 1]:
+            prob[x][y - 1] += value
 
     def isSafe(self, x, y):
         a = self.position[0]

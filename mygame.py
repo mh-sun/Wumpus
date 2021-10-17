@@ -17,7 +17,7 @@ class Game:
         self.window.set_caption(con.CAPTION)
         self.window.set_icon(pygame.image.load(con.WUMPUS_ICON))
 
-        self.surface = self.window.set_mode((self.tiles.width, self.tiles.height))
+        self.surface = self.window.set_mode((self.tiles.width + 200, self.tiles.height))
 
     def event(self):
         for event in pygame.event.get():
@@ -50,8 +50,11 @@ class Game:
         self.surface.fill(con.LIGHTGREY)
         self.tiles.background(self.surface)
         self.tiles.text_view(self.surface)
-        print("Player Position", end=" ")
-        print(self.player.position)
+
+        print("WUMPUS PROB")
+        for i in range(10):
+            print(self.player.wumpus_prob[i])
+
         self.player.draw_player(self.surface)
 
 

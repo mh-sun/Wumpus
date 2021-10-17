@@ -78,18 +78,14 @@ class Tiles:
 
     def get_map(self, i, j):
         temp = []
-        if i + 1 < con.ROW_COUNT:
-            if self.obstacle[i + 1][j] == 'p':
-                temp.append('b')
-        if i - 1 >= 0:
-            if self.obstacle[i - 1][j] == 'p':
-                temp.append('b')
-        if j + 1 < con.COL_COUNT:
-            if self.obstacle[i][j + 1] == 'p':
-                temp.append('b')
-        if j - 1 >= 0:
-            if self.obstacle[i][j - 1] == 'p':
-                temp.append('b')
+        if i + 1 < con.ROW_COUNT and self.obstacle[i + 1][j] == 'p':
+            temp.append('b')
+        if i - 1 >= 0 and  self.obstacle[i - 1][j] == 'p':
+            temp.append('b')
+        if j + 1 < con.COL_COUNT and self.obstacle[i][j + 1] == 'p':
+            temp.append('b')
+        if j - 1 >= 0 and self.obstacle[i][j - 1] == 'p':
+            temp.append('b')
 
         if i + 1 < con.ROW_COUNT:
             if self.obstacle[i + 1][j] == 'w':
