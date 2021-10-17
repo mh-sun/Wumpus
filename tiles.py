@@ -49,29 +49,29 @@ class Tiles:
 
         for i in range(con.ROW_COUNT):
             for j in range(con.COL_COUNT):
-                # if self.tiles_con[i][j] == 'h':
-                #     continue
-                # elif self.tiles_con[i][j] == 'v':
-                if i + 1 < 10 and self.obstacle[i + 1][j] == 'p':
-                    surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif j + 1 < 10 and self.obstacle[i][j + 1] == 'p':
-                    surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif i - 1 >= 0 and self.obstacle[i - 1][j] == 'p':
-                    surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif j - 1 >= 0 and self.obstacle[i][j - 1] == 'p':
-                    surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                if self.tiles_con[i][j] == 'h':
+                    continue
+                elif self.tiles_con[i][j] == 'v':
+                    if i + 1 < 10 and self.obstacle[i + 1][j] == 'p':
+                        surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif j + 1 < 10 and self.obstacle[i][j + 1] == 'p':
+                        surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif i - 1 >= 0 and self.obstacle[i - 1][j] == 'p':
+                        surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif j - 1 >= 0 and self.obstacle[i][j - 1] == 'p':
+                        surface.blit(breeze, (j * con.TILE_SIZE, i * con.TILE_SIZE))
 
-                if i + 1 < 10 and self.obstacle[i + 1][j] == 'w':
-                    surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE + 52))
-                elif j + 1 < 10 and self.obstacle[i][j + 1] == 'w':
-                    surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE + 52))
-                elif i - 1 >= 0 and self.obstacle[i - 1][j] == 'w':
-                    surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif j - 1 >= 0 and self.obstacle[i][j - 1] == 'w':
-                    surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    if i + 1 < 10 and self.obstacle[i + 1][j] == 'w':
+                        surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE + 52))
+                    elif j + 1 < 10 and self.obstacle[i][j + 1] == 'w':
+                        surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE + 52))
+                    elif i - 1 >= 0 and self.obstacle[i - 1][j] == 'w':
+                        surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif j - 1 >= 0 and self.obstacle[i][j - 1] == 'w':
+                        surface.blit(stench, (j * con.TILE_SIZE, i * con.TILE_SIZE))
 
-                if self.obstacle[i][j] == 'g':
-                    surface.blit(lit, (j * con.TILE_SIZE, i * con.TILE_SIZE + 26))
+                    if self.obstacle[i][j] == 'g':
+                        surface.blit(lit, (j * con.TILE_SIZE, i * con.TILE_SIZE + 26))
 
     def get_map(self, i, j):
         temp = []
@@ -109,17 +109,17 @@ class Tiles:
     def background(self, surface):
         for i in range(con.ROW_COUNT):
             for j in range(con.COL_COUNT):
-                # if self.tiles_con[i][j] == 'h':
-                #     surface.blit(self.hidden_floor, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                #     continue
-                # elif self.tiles_con[i][j] == 'v':
-                surface.blit(self.visible_floor, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                if self.obstacle[i][j] == 'p':
-                    surface.blit(self.pit, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif self.obstacle[i][j] == 'w':
-                    surface.blit(self.wumpus, (j * con.TILE_SIZE, i * con.TILE_SIZE))
-                elif self.obstacle[i][j] == 'g':
-                    surface.blit(self.gold, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                if self.tiles_con[i][j] == 'h':
+                    surface.blit(self.hidden_floor, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    continue
+                elif self.tiles_con[i][j] == 'v':
+                    surface.blit(self.visible_floor, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    if self.obstacle[i][j] == 'p':
+                        surface.blit(self.pit, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif self.obstacle[i][j] == 'w':
+                        surface.blit(self.wumpus, (j * con.TILE_SIZE, i * con.TILE_SIZE))
+                    elif self.obstacle[i][j] == 'g':
+                        surface.blit(self.gold, (j * con.TILE_SIZE, i * con.TILE_SIZE))
 
         for i in range(con.ROW_COUNT):
             pygame.draw.line(surface, con.WHITE, (0, i * con.TILE_SIZE), (self.width, i * con.TILE_SIZE))
