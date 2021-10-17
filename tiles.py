@@ -37,7 +37,10 @@ class Tiles:
 
     def set_value(self, count, cls):
         for i in range(count):
-            x = rand.randint(1, 9)
+            if cls == 'w':
+                x = 1
+            else:
+                x = rand.randint(1, 9)
             y = rand.randint(1, 9)
             self.obstacle[x][y] = cls
 

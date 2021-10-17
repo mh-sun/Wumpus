@@ -27,9 +27,9 @@ class Player:
         self.sensor_op(x, y)
 
         if self.tiles.obstacle[x][y] == 'p':
-            print(".......YOU ARE DEAD.......\n.......FELL INTO PIT.......")
+            print("...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
         elif self.tiles.obstacle[x][y] == 'w':
-            print(".......YOU ARE DEAD.......\n.......EATEN BY WUMPUS.......")
+            print("............YOU ARE DEAD...........\n............EATEN BY WUMPUS............")
 
     def on_right_key_pressed(self):
         self.player_image = pygame.image.load(con.PLAYER_RIGHT)
@@ -108,14 +108,15 @@ class Player:
 
     def get_valid_path(self):
         temp = []
+        if self.position[0] - 1 >= 0:
+            temp.append([self.position[0] - 1, self.position[1], 'up'])
         if self.position[1] + 1 < con.COL_COUNT:
             temp.append([self.position[0], self.position[1] + 1, 'right'])
         if self.position[1] - 1 >= 0:
             temp.append([self.position[0], self.position[1] - 1, 'left'])
         if self.position[0] + 1 < con.ROW_COUNT:
             temp.append([self.position[0] + 1, self.position[1], 'down'])
-        if self.position[0] - 1 >= 0:
-            temp.append([self.position[0] - 1, self.position[1], 'up'])
+
         return temp
 
     def sensor_op(self, x, y):
@@ -130,17 +131,18 @@ class Player:
         a = self.position[0]
         b = self.position[1]
         flag = False
-        if ('s' and 'b') not in self.map[a][b]:
-            flag = True
+        if 's' in self.map[a][b] or 'b' in self.map[a][b]:
+            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in self.map[x + 1][y]:
+                flag = True
+            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in self.map[x - 1][y]:
+                flag = True
+            if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][y + 1]:
+                flag = True
+            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][y - 1]:
+                flag = True
+
         else:
-            if x + 1 < 10 and 'v' in self.map[x + 1][y] and ('s' and 'b') not in self.map[x + 1][y]:
-                flag = True
-            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and ('s' and 'b') not in self.map[x - 1][y]:
-                flag = True
-            if y + 1 < 10 and 'v' in self.map[x][y + 1] and ('s' and 'b') not in self.map[x][y + 1]:
-                flag = True
-            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and ('s' and 'b') not in self.map[x][y - 1]:
-                flag = True
+            flag = True
         return flag
 
     def get_unvisited(self, valid_path):

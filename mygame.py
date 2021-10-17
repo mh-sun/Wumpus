@@ -35,21 +35,24 @@ class Game:
 
     def run(self):
         while self.running:
-            self.event()
-
-            self.surface.fill(con.LIGHTGREY)
-            self.tiles.background(self.surface)
-            self.tiles.text_view(self.surface)
-
-            print("Player Position", end=" ")
-            print(self.player.position)
-
-            self.player.draw_player(self.surface)
+            self.method_name()
 
             self.player.think_bro_think()
 
-            self.window.update()
-            self.clock.tick(1)
+            self.method_name1()
+
+    def method_name1(self):
+        self.window.update()
+        self.clock.tick(1)
+
+    def method_name(self):
+        self.event()
+        self.surface.fill(con.LIGHTGREY)
+        self.tiles.background(self.surface)
+        self.tiles.text_view(self.surface)
+        print("Player Position", end=" ")
+        print(self.player.position)
+        self.player.draw_player(self.surface)
 
 
 if __name__ == "__main__":
