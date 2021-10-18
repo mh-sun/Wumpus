@@ -21,8 +21,8 @@ class Player:
 
     def draw_player(self, surface):
         font = pygame.font.SysFont('timesnewroman', 30)
-        Score = font.render("Score :"+str(self.score), False, con.BLACK, con.WHITE)
-        surface.blit(Score,(self.tiles.width+30, 50))
+        Score = font.render("Score :" + str(self.score), False, con.BLACK, con.WHITE)
+        surface.blit(Score, (self.tiles.width + 30, 50))
         surface.blit(self.player_image, (self.position[1] * con.TILE_SIZE, self.position[0] * con.TILE_SIZE))
 
     def tile_state_change(self):
@@ -34,8 +34,9 @@ class Player:
         self.sensor_op(x, y)
 
         if 'l' in self.map[x][y]:
-            self.score += 100
-            self.tiles.get_gold(x, y, self.tiles.obstacle)
+
+            if self.tiles.get_gold(x, y):
+                self.score += 10
 
         if self.tiles.obstacle[x][y] == 'p':
             print("...........YOU ARE DEAD...........\n...........FELL INTO PIT............")
@@ -112,20 +113,18 @@ class Player:
             paths = self.get_Path()
             choosen_path = paths[0]
 
-
-
         if not flag:
-            if self.track[len(self.track)-1][1] == 'up':
-                del self.track[len(self.track)-1]
+            if self.track[len(self.track) - 1][1] == 'up':
+                del self.track[len(self.track) - 1]
                 self.on_down_key_pressed()
-            elif self.track[len(self.track)-1][1] == 'down':
-                del self.track[len(self.track)-1]
+            elif self.track[len(self.track) - 1][1] == 'down':
+                del self.track[len(self.track) - 1]
                 self.on_up_key_pressed()
-            elif self.track[len(self.track)-1][1] == 'right':
-                del self.track[len(self.track)-1]
+            elif self.track[len(self.track) - 1][1] == 'right':
+                del self.track[len(self.track) - 1]
                 self.on_left_key_pressed()
-            elif self.track[len(self.track)-1][1] == 'left':
-                del self.track[len(self.track)-1]
+            elif self.track[len(self.track) - 1][1] == 'left':
+                del self.track[len(self.track) - 1]
                 self.on_right_key_pressed()
 
     def get_valid_path(self):
@@ -172,13 +171,17 @@ class Player:
         b = self.position[1]
         flag = False
         if 's' in self.map[a][b] or 'b' in self.map[a][b]:
-            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in self.map[x + 1][y]:
+            if x + 1 < 10 and 'v' in self.map[x + 1][y] and 's' not in self.map[x + 1][y] and 'b' not in \
+                    self.map[x + 1][y]:
                 flag = True
-            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in self.map[x - 1][y]:
+            if x - 1 >= 0 and 'v' in self.map[x - 1][y] and 's' not in self.map[x - 1][y] and 'b' not in \
+                    self.map[x - 1][y]:
                 flag = True
-            if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][y + 1]:
+            if y + 1 < 10 and 'v' in self.map[x][y + 1] and 's' not in self.map[x][y + 1] and 'b' not in self.map[x][
+                y + 1]:
                 flag = True
-            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][y - 1]:
+            if y - 1 >= 0 and 'v' in self.map[x][y - 1] and 's' not in self.map[x][y - 1] and 'b' not in self.map[x][
+                y - 1]:
                 flag = True
 
         else:
@@ -195,4 +198,17 @@ class Player:
                 temp.append(valid_path[i])
         return temp
 
-
+    def get_Path(self):
+        temp = []
+        if len(self.pit_prob) == 0 or len(self.wumpus_prob) == 0:
+            return temp
+        for i in range(10):
+            for j in range(10):
+                if self.pit_prob[i][j] > 0:
+                    temp.append([self.pit_prob[i][j], [i, j], 'p'])
+        for i in range(10):
+            for j in range(10):
+                if self.wumpus_prob[i][j] > 0:
+                    temp.append([self.wumpus_prob[i][j], [i, j], 'w'])
+        temp.sort()
+        return temp

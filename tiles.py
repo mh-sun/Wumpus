@@ -24,13 +24,15 @@ class Tiles:
         self.pit = pygame.image.load(con.PIT)
         self.gold = pygame.image.load(con.GOLD)
 
+        self.flag = False
+
         self.tiles_con = array_construct('h')
         self.tiles_con[0][0] = 'v'
-
         self.obstacle = array_construct('n')
         self.set_obstacle()
 
     def set_obstacle(self):
+
         self.set_value(con.WUMPUS_COUNT, "w")
         self.set_value(con.GOLD_COUNT, "g")
         self.set_value(con.PIT_COUNT, "p")
@@ -130,6 +132,10 @@ class Tiles:
             pygame.draw.line(surface, con.WHITE, (i * con.TILE_SIZE, 0), (i * con.TILE_SIZE, self.height))
         pygame.draw.line(surface, con.WHITE, (self.width - 1, 0), (self.width - 1, self.height))
 
-    def get_gold(self, x, y, obs):
-        if obs[x][y] == 'g':
-            obs[x][y] = 'n'
+    def get_gold(self, x, y):
+        if self.obstacle[x][y] == 'g':
+            self.obstacle[x][y] = 'n'
+            return True
+
+        else:
+            return False
